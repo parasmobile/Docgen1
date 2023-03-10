@@ -64,8 +64,13 @@ class Connexion:
                 f"Read the README file, section 'Executing the script' for more informations about how to "
                 f"run the script.", dict_of(host, port)
             ) from e
-        self.desktop = self.ctx.ServiceManager.createInstanceWithContext("com.sun.star.frame.Desktop", self.ctx)
-        self.graphic_provider = self.ctx.ServiceManager.createInstance('com.sun.star.graphic.GraphicProvider')
+        self.service_manager = self.ctx.ServiceManager
+        self.desktop = self.service_manager.createInstanceWithContext(
+            "com.sun.star.frame.Desktop", self.ctx)
+        self.graphic_provider = self.service_manager.createInstanceWithContext(
+            'com.sun.star.graphic.GraphicProvider', self.ctx)
+        self.dispatcher = self.service_manager.createInstanceWithContext(
+            'com.sun.star.frame.DispatchHelper', self.ctx)
 
     def restart(self) -> None:
         """
@@ -331,13 +336,23 @@ class Template:
             :return: None
             """
 
+            copy_with_format(value, 'application/html')
+
             search = doc.createSearchDescriptor()
             search.SearchString = variable
-            founded = doc.findAll(search)
-            instances = [founded.getByIndex(i) for i in range(founded.getCount())]
+            var_search_results = doc.findAll(search)
+            var_occurrences = [
+                var_search_results.getByIndex(i)
+                for i in range(var_search_results.getCount())
+            ]
 
-            for string in instances:
-                string.String = string.String.replace(variable, value)
+            cursor = doc.CurrentController.ViewCursor
+
+            for var_occurrence in var_occurrences:
+                cursor.gotoRange(var_occurrence, False)
+                self.cnx.dispatcher.executeDispatch(
+                    doc.CurrentController.Frame,
+                    ".uno:Paste", "", 0, ())
 
             for page in doc.getDrawPages():
                 for shape in page:

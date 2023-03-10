@@ -9,11 +9,13 @@ __all__ = (
     'convert_to_datas_template',
     'is_network_based',
     'get_file_url',
-    'var_regexes'
+    'var_regexes',
+    'copy_with_format',
 )
 
 import functools
 import os
+import subprocess
 import types
 import urllib.request
 import urllib.error
@@ -82,6 +84,7 @@ def convert_to_datas_template(json) -> dict[dict[str: Union[str, list]]]:
         :param f: the function to wraps
         :return: the wrapper
         """
+
         # pris en charge : toutes les objects non récursifs (int, str, bool), None, ainsi que les listes
         # (première instance seulement) et dictionnaires (clé et valeur)
         @functools.wraps(f)
@@ -140,8 +143,10 @@ def convert_to_datas_template(json) -> dict[dict[str: Union[str, list]]]:
                                 variable_type=f.__name__[12:], variable=var_name
                             )
                         )
+
             recursive_check_type(var_type, var_value)
             return f(var_name, var_value)
+
         return wrapper_check_type
 
     @check_type
@@ -262,7 +267,28 @@ def get_file_url(file: str) -> str:
     :return: the URL or URI to the path
     """
     return file if is_network_based(file) else (
-        "file://" + ((os.getcwd() + "/" + file) if file[0] != '/' else file))
+            "file://" + ((os.getcwd() + "/" + file) if file[0] != '/' else file))
+
+
+def copy_with_format(text: str, mime: str) -> None:
+    """
+    Copies the text with the given format
+
+    :param text: the text to copy
+    :param mime: the MIME type in which the text will be formatted on paste
+    :return: None
+    """
+
+    args = ('xclip', '-selection', 'clipboard', '-target', mime)
+    process = subprocess.Popen(args, stdin=subprocess.PIPE, text=True)
+    stdout, stderr = process.communicate(text)
+    if process.returncode != 0:
+        raise errors.CopyError(
+            'copy_error',
+            f"An error occurred while copying the text {text!r} with the format {mime!r}. "
+            f"xclip returned {process.returncode} with the following output: {stdout!r} and {stderr!r}",
+            dict_of(text, stdout, stderr, return_code=process.returncode)
+        )
 
 
 var_regexes = {

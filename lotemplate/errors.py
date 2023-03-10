@@ -15,6 +15,7 @@ __all__ = (
     'ExportError',
     'FileNotFoundError',
     'UnoException',
+    'CopyError',
 )
 
 from typing import Union
@@ -48,4 +49,8 @@ class FileNotFoundError(LotemplateError):
 
 
 class UnoException(LotemplateError):
+    pass
+
+
+class CopyError(LotemplateError):
     pass

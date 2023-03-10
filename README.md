@@ -14,6 +14,7 @@ For more information on a specific usage, read, the `Execute and use the API` or
 ## Requirements
 For Docker use of the API, you can skip this step.
 
+- xclip
 - LibreOffice (the console-line version will be enough)
 - python3.8 or higher
 - some python packages specified in [requirement.txt](requirements.txt) that you can install with
