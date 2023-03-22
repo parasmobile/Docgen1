@@ -142,7 +142,7 @@ class Template:
             self.close()
             raise errors.UnoException(
                 'connection_closed',
-                f"The previously etablished connection with the soffice process on '{self.cnx.host}:{self.cnx.port}' "
+                f"The previously established connection with the soffice process on '{self.cnx.host}:{self.cnx.port}' "
                 f"has been closed, or ran into an unknown error. Please restart the soffice process, and retry.",
                 dict_of(cnx.host, cnx.port)
             ) from e
@@ -157,14 +157,14 @@ class Template:
             )
         self.variables = self.scan(should_close=True) if should_scan else None
 
-    def scan(self, **kargs) -> dict[str: dict[str, Union[str, list[str]]]]:
+    def scan(self, **kwargs) -> dict[str: dict[str, Union[str, list[str]]]]:
         """
         scans the variables contained in the template. Supports text, tables and images
 
         :return: list containing all the variables founded in the template
         """
 
-        should_close = kargs["should_close"] if "should_close" in kargs else False
+        should_close = kwargs.get("should_close", False)
 
         def scan_text(doc) -> dict[str, dict[str, str]]:
             """
@@ -460,7 +460,7 @@ class Template:
         except RuntimeException as e:
             raise errors.UnoException(
                 'connection_closed',
-                f"The previously etablished connection with the soffice process on "
+                f"The previously established connection with the soffice process on "
                 f"'{self.cnx.host}:{self.cnx.port}' has been closed, or ran into an unknown error. "
                 f"Please restart the soffice process, and retry.",
                 dict_of(self.cnx.host, self.cnx.port)
