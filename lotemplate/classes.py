@@ -336,7 +336,7 @@ class Template:
             :return: None
             """
 
-            copy_with_format(value, 'application/html')
+            copy_with_format(value, 'text/html')
 
             search = doc.createSearchDescriptor()
             search.SearchString = variable
