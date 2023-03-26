@@ -7,7 +7,8 @@ import lotemplate as ot
 from time import sleep
 import subprocess
 
-subprocess.call(f'soffice "--accept=socket,host=localhost,port=2002;urp;StarOffice.ServiceManager" &', shell=True)
+subprocess.call(f'xvfb-run  -s="-ac" libreoffice --accept="socket,host=localhost,port=2002;urp;StarOffice.ServiceManager"  &',
+                shell=True)
 sleep(2)
 cnx = ot.Connexion("localhost", "2002")
 

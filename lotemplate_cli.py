@@ -50,7 +50,8 @@ if __name__ == '__main__':
 
     # run soffice
     subprocess.call(
-        f'soffice "--accept=socket,host={args.host},port={args.port};urp;StarOffice.ServiceManager" &', shell=True)
+        f'xvfb-run  -s="-ac" libreoffice --accept="socket,host={args.host},port={args.port};urp;StarOffice.ServiceManager"  &',
+        shell=True)
     sleep(2)
 
     # establish the connection to the server
