@@ -22,10 +22,7 @@ args = p.parse_known_args()[0]
 
 os.makedirs("uploads", exist_ok=True)
 os.makedirs("exports", exist_ok=True)
-subprocess.call(
-        f'xvfb-run  -s="-ac" libreoffice --accept="socket,host={args.host},port={args.port};urp;StarOffice.ServiceManager"  &',
-    shell=True)
-sleep(3)
+sleep(10)
 cnx = ot.Connexion(args.host, args.port)
 
 

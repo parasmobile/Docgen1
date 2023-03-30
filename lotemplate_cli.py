@@ -49,10 +49,6 @@ if __name__ == '__main__':
     args = set_arguments()
 
     # run soffice
-    subprocess.call(
-        f'xvfb-run  -s="-ac" libreoffice --accept="socket,host={args.host},port={args.port};urp;StarOffice.ServiceManager"  &',
-        shell=True)
-    sleep(2)
 
     # establish the connection to the server
     connexion = ot.Connexion(args.host, args.port)
