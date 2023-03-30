@@ -24,6 +24,7 @@ from com.sun.star.lang import IllegalArgumentException, DisposedException
 from com.sun.star.connection import NoConnectException
 from com.sun.star.uno import RuntimeException
 from com.sun.star.awt import Size
+from com.sun.star.beans.PropertyState import DIRECT_VALUE
 
 from . import errors
 from .utils import *
@@ -357,7 +358,7 @@ class Template:
             for page in doc.getDrawPages():
                 for shape in page:
                     if shape.getShapeType() == "com.sun.star.drawing.TextShape":
-                        shape.String = shape.String.replace(variable, value)
+                        shape.String = shape.String.replace(variable, strip_html_tags(value))
 
         def image_fill(doc, graphic_provider, variable: str, path: str, should_resize=True) -> None:
             """
