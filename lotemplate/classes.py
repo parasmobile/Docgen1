@@ -421,6 +421,8 @@ class Template:
                  } for tab in list(set(variable['table'] for variable in tab_vars))
             ]
 
+            print(tables)
+
             for element in tables:
 
                 table = element['table']
@@ -437,7 +439,7 @@ class Template:
                     for variable_name, variable_value in sorted(table_vars.items(), key=lambda s: -len(s[0])):
                         new_row = tuple(
                             elem.replace(
-                                variable_name, variable_value[i]
+                                variable_name, strip_html_tags(variable_value[i])
                                 if i < len(variable_value) else ""
                             ) for elem in new_row
                         )
