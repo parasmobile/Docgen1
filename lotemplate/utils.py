@@ -11,6 +11,7 @@ __all__ = (
     'get_file_url',
     'var_regexes',
     'copy_with_format',
+    'strip_html_tags',
 )
 
 import functools
@@ -23,6 +24,7 @@ from typing import Union
 from sorcery import dict_of
 from copy import deepcopy
 import regex
+from bs4 import BeautifulSoup
 
 from . import errors
 
@@ -289,6 +291,17 @@ def copy_with_format(text: str, mime: str) -> None:
             f"xclip returned {process.returncode} with the following output: {stdout!r} and {stderr!r}",
             dict_of(text, stdout, stderr, return_code=process.returncode)
         )
+
+
+def strip_html_tags(text: str) -> str:
+    """
+    Strips the HTML tags from the given text
+
+    :param text: the text to strip
+    :return: the text without HTML tags
+    """
+    soup = BeautifulSoup(text, 'html.parser')
+    return soup.get_text()
 
 
 var_regexes = {
