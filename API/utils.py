@@ -34,10 +34,6 @@ def restart_soffice() -> None:
     """
 
     clean_temp_files()
-    subprocess.call(
-            f'xvfb-run  -s="-ac" libreoffice --accept="socket,host={cnx.host},port={cnx.port};urp;StarOffice.ServiceManager"  &',
-        shell=True
-    )
     sleep(2)
     try:
         cnx.restart()

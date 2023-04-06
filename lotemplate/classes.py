@@ -347,7 +347,11 @@ class Template:
             ]
 
             cursor = doc.CurrentController.ViewCursor
-
+            print(os.environ)
+            oClip = self.cnx.ctx.getServiceManager().createInstanceWithContext("com.sun.star.datatransfer.clipboard.SystemClipboard", self.cnx.ctx)
+            print("################")
+            print(oClip.getContents())
+            print(oClip.getContents())
             for var_occurrence in var_occurrences:
                 cursor.gotoRange(var_occurrence, False)
                 self.cnx.dispatcher.executeDispatch(
